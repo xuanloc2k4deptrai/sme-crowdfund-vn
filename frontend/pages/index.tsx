@@ -3,7 +3,6 @@ import Head from "next/head";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Button from "../src/components/ui/Button";
-import Image from "next/image";
 import Hero from "../src/components/layout/Hero";
 import FeatureSection from "../src/components/layout/FeatureSection";
 import HowItWorks from "../src/components/layout/HowItWorks";
@@ -11,7 +10,6 @@ import Newsletter from "../src/components/layout/Newsletter";
 import AnnouncementBanner from "../src/components/layout/AnnouncementBanner";
 import MobileAppPromo from "../src/components/layout/MobileAppPromo";
 import { mockCampaigns } from "../src/mocks/campaignMock";
-import { getPlaceholderImage } from "../src/utils/placeholderImages";
 
 // Dynamic imports for better performance
 const CampaignCard = dynamic(() => import("../src/components/campaign/CampaignCard"), {
@@ -353,35 +351,24 @@ const Home: React.FC = () => {
               
               return (
                 <div key={project.id} className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-1">
-                  <div className="h-56 relative overflow-hidden bg-gray-200">
-                    {/* Debug: Simple test image */}
-                    <div className="absolute top-2 left-2 z-10 bg-red-500 text-white px-2 py-1 text-xs rounded">
-                      DEBUG: Image Test
+                  <div className="h-56 relative overflow-hidden">
+                    {/* Pure CSS background - no external requests */}
+                    <div 
+                      className={`w-full h-full flex items-center justify-center text-white text-center p-6 ${
+                        project.title?.includes('TechLink') ? 'bg-gradient-to-br from-blue-500 to-blue-700' :
+                        project.title?.includes('Green Farm') ? 'bg-gradient-to-br from-green-500 to-green-700' :
+                        project.title?.includes('Smart Health') ? 'bg-gradient-to-br from-red-500 to-red-700' :
+                        'bg-gradient-to-br from-purple-500 to-purple-700'
+                      }`}
+                    >
+                      <div className="transform group-hover:scale-105 transition-transform duration-500">
+                        <h3 className="font-bold text-xl mb-2">{project.title}</h3>
+                        <p className="text-sm opacity-90">Dự án {project.industry}</p>
+                        <div className="mt-3 inline-block bg-white/20 px-3 py-1 rounded-full text-xs">
+                          Startup Innovation
+                        </div>
+                      </div>
                     </div>
-                    
-                    <img 
-                      src={`${getPlaceholderImage(project)}?v=${Date.now()}`}
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onLoad={() => console.log(`✅ Image loaded: ${project.title}`)}
-                      onError={(e) => {
-                        console.log(`❌ Image failed: ${project.title}`);
-                        const target = e.target as HTMLImageElement;
-                        // Fallback to simple colored div
-                        target.style.display = 'none';
-                        const parent = target.parentElement;
-                        if (parent) {
-                          parent.innerHTML = `
-                            <div class="w-full h-full flex items-center justify-center bg-blue-500 text-white text-center p-4">
-                              <div>
-                                <h3 class="font-bold text-lg">${project.title}</h3>
-                                <p class="text-sm opacity-80">Dự án ${project.industry}</p>
-                              </div>
-                            </div>
-                          `;
-                        }
-                      }}
-                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div className="absolute top-4 right-4 bg-yellow-400 text-blue-900 text-sm font-bold px-3 py-1 rounded-full shadow-lg">
                       {project.industry}
