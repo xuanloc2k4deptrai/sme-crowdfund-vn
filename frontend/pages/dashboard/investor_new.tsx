@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
-import { AuthContext } from '../../contexts/AuthContext';
-import PrivateRoute from '../../components/auth/PrivateRoute';
-import SmartAnalytics from '../../components/ai/SmartAnalytics';
-import NotificationSystem from '../../components/notifications/NotificationSystem';
-import { Campaign } from '../../types';
+import { AuthContext } from '../../src/contexts/AuthContext';
+import PrivateRoute from '../../src/components/auth/PrivateRoute';
+import SmartAnalytics from '../../src/components/ai/SmartAnalytics';
+import NotificationSystem from '../../src/components/notifications/NotificationSystem';
+import { Campaign } from '../../src/types';
 
 const InvestorDashboard = () => {
   const auth = useContext(AuthContext);

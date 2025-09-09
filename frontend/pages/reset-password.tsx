@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Button from '../components/ui/Button';
+import Button from '../src/components/ui/Button';
 
 const resetPasswordSchema = z.object({
   password: z.string().min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" }),

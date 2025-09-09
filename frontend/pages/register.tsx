@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { AuthContext } from '../contexts/AuthContext';
-import Button from '../components/ui/Button';
+import { AuthContext } from '../src/contexts/AuthContext';
+import Button from '../src/components/ui/Button';
 
 interface RegisterForm {
   name: string;

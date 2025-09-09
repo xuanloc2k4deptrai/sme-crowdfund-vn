@@ -1,11 +1,11 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { AuthContext } from '../../contexts/AuthContext';
-import { Campaign } from '../../types';
-import { fetchCampaignById } from '../../services/campaignService';
-import Button from '../../components/ui/Button';
 import Head from 'next/head';
+import { AuthContext } from '../../src/contexts/AuthContext';
+import { Campaign } from '../../src/types';
+import { fetchCampaignById } from '../../src/services/campaignService';
+import Button from '../../src/components/ui/Button';
 
 const CampaignPage = () => {
   const router = useRouter();

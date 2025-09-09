@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useAuth } from '../../hooks/useAuth';
-import { createCampaign } from '../../services/campaignService';
-import Button from '../../components/ui/Button';
-import PrivateRoute from '../../components/auth/PrivateRoute';
+import { useAuth } from '../../src/hooks/useAuth';
+import { createCampaign } from '../../src/services/campaignService';
+import Button from '../../src/components/ui/Button';
+import PrivateRoute from '../../src/components/auth/PrivateRoute';
 
 // Validation schema for campaign creation
 const campaignSchema = z.object({

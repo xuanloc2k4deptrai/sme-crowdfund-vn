@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { AuthContext } from '../contexts/AuthContext';
-import Button from '../components/ui/Button';
+import { AuthContext } from '../src/contexts/AuthContext';
+import Button from '../src/components/ui/Button';
 
 // Validation schema
 const loginSchema = z.object({

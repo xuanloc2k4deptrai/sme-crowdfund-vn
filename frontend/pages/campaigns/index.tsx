@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CampaignCard from '../../components/campaign/CampaignCard';
-import { fetchCampaigns } from '../../services/campaignService';
-import { Campaign } from '../../types';
+import CampaignCard from '../../src/components/campaign/CampaignCard';
+import { fetchCampaigns } from '../../src/services/campaignService';
+import { Campaign } from '../../src/types';
 
 const CampaignsPage = () => {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
