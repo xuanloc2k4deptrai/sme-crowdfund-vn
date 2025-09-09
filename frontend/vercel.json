@@ -1,20 +1,13 @@
 {
   "version": 2,
-  "name": "sme-crowdfund-vn",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
+  "name": "sme-crowdfund-vn-frontend",
+  "buildCommand": "cd frontend && npm ci && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm ci",
+  "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_API_URL": "@api_url",
-    "NEXT_PUBLIC_SITE_URL": "@site_url"
+    "NEXT_PUBLIC_API_URL": "https://sme-crowdfund-vn.onrender.com/api",
+    "NEXT_PUBLIC_SITE_URL": "https://sme-crowdfund-vn.vercel.app",
+    "NODE_ENV": "production"
   }
 }
