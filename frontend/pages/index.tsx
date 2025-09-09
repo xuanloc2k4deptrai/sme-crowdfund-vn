@@ -353,14 +353,33 @@ const Home: React.FC = () => {
               
               return (
                 <div key={project.id} className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-1">
-                  <div className="h-56 relative overflow-hidden">
+                  <div className="h-56 relative overflow-hidden bg-gray-200">
+                    {/* Debug: Simple test image */}
+                    <div className="absolute top-2 left-2 z-10 bg-red-500 text-white px-2 py-1 text-xs rounded">
+                      DEBUG: Image Test
+                    </div>
+                    
                     <img 
-                      src={getPlaceholderImage(project)} 
+                      src={`${getPlaceholderImage(project)}?v=${Date.now()}`}
                       alt={project.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onLoad={() => console.log(`✅ Image loaded: ${project.title}`)}
                       onError={(e) => {
+                        console.log(`❌ Image failed: ${project.title}`);
                         const target = e.target as HTMLImageElement;
-                        target.src = getPlaceholderImage(project);
+                        // Fallback to simple colored div
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `
+                            <div class="w-full h-full flex items-center justify-center bg-blue-500 text-white text-center p-4">
+                              <div>
+                                <h3 class="font-bold text-lg">${project.title}</h3>
+                                <p class="text-sm opacity-80">Dự án ${project.industry}</p>
+                              </div>
+                            </div>
+                          `;
+                        }
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
