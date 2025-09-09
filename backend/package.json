@@ -2,11 +2,13 @@
   "name": "sme-crowdfund-backend",
   "version": "0.1.0",
   "description": "Backend service for SME crowdfunding platform in Vietnam.",
-  "main": "dist/server.js",
+  "main": "dist/simple-server.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "ts-node src/simple-server.ts",
+    "dev:server": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/simple-server.js",
+    "start:prod": "node dist/simple-server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
