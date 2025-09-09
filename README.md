@@ -46,7 +46,7 @@
 ### Cài đặt nhanh
 ```bash
 # Clone project
-git clone <repo-url>
+git clone https://github.com/xuanloc2k4deptrai/sme-crowdfund-vn.git
 cd sme-crowdfund-vn
 
 # Install dependencies
@@ -59,6 +59,18 @@ npm run dev
 ### URLs Development
 - **Frontend**: http://localhost:3002
 - **Backend**: http://localhost:5000
+
+### 🆓 DEPLOYMENT MIỄN PHÍ
+```bash
+# Deploy hoàn toàn miễn phí
+./deploy-free.bat
+```
+
+**Platforms miễn phí:**
+- **Frontend**: Vercel (100GB/month free)
+- **Backend**: Render (750 hours/month free)
+- **Database**: PostgreSQL (1GB free)
+- **Total cost**: $0/month
 
 ### Production Build
 ```bash
