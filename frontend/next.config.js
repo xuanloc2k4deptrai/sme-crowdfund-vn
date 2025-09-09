@@ -2,6 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   
+  // Force Pages Router (disable App Router)
+  experimental: {
+    appDir: false,
+  },
+  
+  // Page routing configuration
+  pageExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  
   // Image optimization
   images: {
     domains: ['localhost', '127.0.0.1'], // Local development domains
