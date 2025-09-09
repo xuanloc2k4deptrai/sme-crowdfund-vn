@@ -15,7 +15,7 @@ export interface Campaign {
     imageUrl?: string;
     createdAt: string;
     
-    // Backward compatibility with existing code
+    // Extended properties for dashboard
     fundingGoal?: number;
     currentAmount?: number;
     startDate?: Date;
@@ -27,6 +27,8 @@ export interface Campaign {
     investors?: number;
     rating?: number;
     location?: string;
+    expectedROI?: string;
+    timeline?: string;
 }
 
 export interface TeamMember {
