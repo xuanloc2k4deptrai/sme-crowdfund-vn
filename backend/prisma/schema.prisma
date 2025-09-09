@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String    
+  name      String?
+  role      String    @default("investor")
+  createdAt DateTime  @default(now())
+  campaigns Campaign[]
+}
+
+model Campaign {
+  id          Int      @id @default(autoincrement())
+  title       String
+  summary     String?
+  description String?  @default("")
+  target      Int
+  raised      Int      @default(0)
+  status      String   @default("draft")
+  ownerId     Int
+  owner       User     @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  imageUrl    String?
+  startDate   DateTime?
+  endDate     DateTime?
+  riskLevel   String?   @default("medium")
+  industry    String?
+  type        String?   @default("equity")
+  location    String?   @default("Việt Nam")
+  rating      Float?    @default(3.0)
+  investors   Int?      @default(0)
+}

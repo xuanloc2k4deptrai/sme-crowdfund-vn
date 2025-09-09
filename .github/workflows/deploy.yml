@@ -1,0 +1,101 @@
+# SME CrowdFund VN - GitHub Workflow
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: 📂 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: 🟢 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: 📦 Install Frontend Dependencies
+      run: |
+        cd frontend
+        npm ci
+        
+    - name: 📦 Install Backend Dependencies  
+      run: |
+        cd backend
+        npm ci
+        
+    - name: 🔍 Lint Frontend
+      run: |
+        cd frontend
+        npm run lint
+        
+    - name: 🏗️ Build Frontend
+      run: |
+        cd frontend
+        npm run build
+        
+    - name: 🏗️ Build Backend
+      run: |
+        cd backend
+        npm run build
+        
+    - name: 🧪 Test Frontend
+      run: |
+        cd frontend
+        npm run test -- --watchAll=false
+        
+    - name: 🧪 Test Backend
+      run: |
+        cd backend
+        npm run test
+        
+    - name: 📊 Upload Coverage Reports
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        
+  deploy-preview:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: 📂 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Deploy Preview to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID }}
+        vercel-project-id: ${{ secrets.PROJECT_ID }}
+        working-directory: ./frontend
+        
+  deploy-production:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📂 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Deploy to Production
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.ORG_ID }}
+        vercel-project-id: ${{ secrets.PROJECT_ID }}
+        vercel-args: '--prod'
+        working-directory: ./frontend
