@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import Button from "../src/components/ui/Button";
 import Image from "next/image";
 import Hero from "../src/components/layout/Hero";
@@ -11,7 +12,44 @@ import AnnouncementBanner from "../src/components/layout/AnnouncementBanner";
 import MobileAppPromo from "../src/components/layout/MobileAppPromo";
 import { mockCampaigns } from "../src/mocks/campaignMock";
 
+// Dynamic imports for better performance
+const CampaignCard = dynamic(() => import("../src/components/campaign/CampaignCard"), {
+  loading: () => <CampaignSkeleton />,
+  ssr: false
+});
+
+// Skeleton component for loading state
+const CampaignSkeleton = () => (
+  <div className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+    <div className="h-48 bg-gray-300"></div>
+    <div className="p-6">
+      <div className="h-6 bg-gray-300 rounded mb-3"></div>
+      <div className="h-4 bg-gray-300 rounded mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
+      <div className="flex justify-between items-center">
+        <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+        <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+      </div>
+    </div>
+  </div>
+);
+
 const Home: React.FC = () => {
+  const [featuredProjects, setFeaturedProjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load featured projects with delay for better UX
+  useEffect(() => {
+    const loadFeaturedProjects = async () => {
+      // Simulate loading time
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setFeaturedProjects(mockCampaigns.slice(0, 3));
+      setLoading(false);
+    };
+    
+    loadFeaturedProjects();
+  }, []);
+
   // Calculate days remaining for each campaign
   const calculateDaysRemaining = (endDate: Date) => {
     const today = new Date();
@@ -30,17 +68,33 @@ const Home: React.FC = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN').format(amount);
   };
-
-  // Get featured projects (first 3)
-  const featuredProjects = mockCampaigns.slice(0, 3);
   return (
     <div className="overflow-hidden">
       <Head>
         <title>SME Crowdfund VN - Nền tảng gọi vốn cộng đồng cho doanh nghiệp nhỏ và vừa</title>
         <meta
           name="description"
-          content="Nền tảng gọi vốn cộng đồng chuyên biệt dành cho doanh nghiệp vừa và nhỏ tại Việt Nam"
+          content="Nền tảng gọi vốn cộng đồng chuyên biệt dành cho doanh nghiệp vừa và nhỏ tại Việt Nam. Kết nối startup với nhà đầu tư một cách minh bạch và hiệu quả."
         />
+        <meta name="keywords" content="crowdfunding, startup, SME, đầu tư, gọi vốn, Việt Nam" />
+        <meta property="og:title" content="SME Crowdfund VN - Nền tảng gọi vốn hàng đầu Việt Nam" />
+        <meta property="og:description" content="Kết nối doanh nghiệp SME với nhà đầu tư. Minh bạch, an toàn, hiệu quả." />
+        <meta property="og:type" content="website" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        
+        {/* Preload critical fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        
+        {/* Critical CSS for faster loading */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            body { font-family: Inter, system-ui, sans-serif; }
+            .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+          `
+        }} />
       </Head>
       
       {/* Announcement Banner */}
@@ -262,7 +316,13 @@ const Home: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProjects.map((project) => {
+            {loading ? (
+              // Loading skeletons
+              Array.from({ length: 3 }).map((_, index) => (
+                <CampaignSkeleton key={index} />
+              ))
+            ) : (
+              featuredProjects.map((project) => {
               const progress = calculateProgress(project.raised, project.target);
               const daysRemaining = project.endDate ? calculateDaysRemaining(project.endDate) : 0;
               
@@ -369,7 +429,8 @@ const Home: React.FC = () => {
                   </div>
                 </div>
               );
-            })}
+            })
+            )}
           </div>
           
           <div className="mt-16 text-center">
