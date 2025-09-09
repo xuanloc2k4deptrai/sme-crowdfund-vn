@@ -11,6 +11,7 @@ import Newsletter from "../src/components/layout/Newsletter";
 import AnnouncementBanner from "../src/components/layout/AnnouncementBanner";
 import MobileAppPromo from "../src/components/layout/MobileAppPromo";
 import { mockCampaigns } from "../src/mocks/campaignMock";
+import { getPlaceholderImage } from "../src/utils/placeholderImages";
 
 // Dynamic imports for better performance
 const CampaignCard = dynamic(() => import("../src/components/campaign/CampaignCard"), {
@@ -354,12 +355,12 @@ const Home: React.FC = () => {
                 <div key={project.id} className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-1">
                   <div className="h-56 relative overflow-hidden">
                     <img 
-                      src={project.imageUrl} 
+                      src={getPlaceholderImage(project)} 
                       alt={project.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/800x600/2563eb/FFFFFF/?text=${encodeURIComponent(project.title)}`;
+                        target.src = getPlaceholderImage(project);
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>

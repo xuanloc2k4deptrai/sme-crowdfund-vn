@@ -1,5 +1,12 @@
 import { Campaign } from '../types';
 
+// Data URL placeholder images that always work
+const placeholderImages = {
+  techlink: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMjU2M2ViIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5UZWNoTGluayBBSTwvdGV4dD48L3N2Zz4=',
+  greenfarm: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTZhMzRhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5HcmVlbiBGYXJtPC90ZXh0Pjwvc3ZnPg==',
+  smarthealth: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGMyNjI2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI0OCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TbWFydCBIZWFsdGg8L3RleHQ+PC9zdmc+'
+};
+
 // Mock campaigns for development
 export const mockCampaigns: Campaign[] = [
   {
@@ -386,7 +393,7 @@ export const mockCampaigns: Campaign[] = [
     raised: 250000000,
     status: 'active',
     ownerId: 1,
-    imageUrl: 'https://via.placeholder.com/800x500/2563eb/ffffff?text=TechLink+AI+Platform',
+    imageUrl: placeholderImages.techlink,
     createdAt: '2025-08-25T09:00:00Z',
     endDate: new Date('2025-09-18T09:00:00Z'),
     industry: 'Công nghệ',
@@ -708,7 +715,7 @@ export const mockCampaigns: Campaign[] = [
     raised: 150000000,
     status: 'active',
     ownerId: 2,
-    imageUrl: 'https://via.placeholder.com/800x500/16a34a/ffffff?text=Green+Farm+Organic',
+    imageUrl: placeholderImages.greenfarm,
     createdAt: '2025-09-01T10:30:00Z',
     endDate: new Date('2025-09-11T10:30:00Z'),
     industry: 'Nông nghiệp',
@@ -1214,7 +1221,7 @@ export const mockCampaigns: Campaign[] = [
     raised: 50000000,
     status: 'active',
     ownerId: 1,
-    imageUrl: 'https://via.placeholder.com/800x500/dc2626/ffffff?text=Smart+Health+System',
+    imageUrl: placeholderImages.smarthealth,
     createdAt: '2025-08-12T14:15:00Z',
     endDate: new Date('2025-10-01T14:15:00Z'),
     industry: 'Y tế',
