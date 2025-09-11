@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '../ui/Button';
+import ImageWithFallback from '../ui/ImageWithFallback';
 
 interface HeroProps {
   title?: string;
@@ -84,14 +85,12 @@ const Hero: React.FC<HeroProps> = ({
             <div className="relative w-full max-w-md">
               {/* Main image */}
               <div className="relative z-10 rounded-xl overflow-hidden shadow-2xl border border-white/20 transform hover:-rotate-1 transition-all duration-300">
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-                  alt="SME Crowdfunding Platform" 
-                  className="w-full h-auto"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "https://via.placeholder.com/800x600/2a4365/e2e8f0/?text=Business+Meeting";
-                  }}
+                <ImageWithFallback
+                  src=""
+                  alt="SME Crowdfunding Platform - Business Meeting"
+                  className="w-full h-auto aspect-[3/2]"
+                  style={{ minHeight: '400px' }}
+                  fallbackType="business"
                 />
               </div>
               

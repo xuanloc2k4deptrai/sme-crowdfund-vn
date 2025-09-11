@@ -6,6 +6,7 @@ import { Campaign } from '../../types';
 import { fetchCampaignById } from '../../services/campaignService';
 import Button from '../../components/ui/Button';
 import Head from 'next/head';
+import ImageWithFallback from '../../components/ui/ImageWithFallback';
 
 const CampaignPage = () => {
   const router = useRouter();
@@ -148,15 +149,12 @@ const CampaignPage = () => {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="md:flex">
             <div className="md:w-1/2 relative">
-              <img 
-                src={campaign.imageUrl || '/images/default-campaign.jpg'} 
-                alt={campaign.title} 
-                className="w-full h-full object-cover"
+              <ImageWithFallback
+                src={campaign.imageUrl || ''}
+                alt={campaign.title}
+                className="w-full h-full"
                 style={{ minHeight: '400px' }}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "https://via.placeholder.com/600x400/2a4365/e2e8f0/?text=Campaign";
-                }}
+                fallbackType={campaign.industry === 'Technology' ? 'gradient' : campaign.industry === 'Food & Beverage' ? 'pattern' : 'business'}
               />
               <div className="absolute top-4 left-4 px-3 py-1 bg-white/80 backdrop-blur-sm text-navy-800 rounded-full capitalize text-sm font-medium">
                 {campaign.type === 'equity' ? 'Cổ phần' : campaign.type === 'debt' ? 'Trái phiếu' : 'Tài trợ'}

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import ImageWithFallback from '../ui/ImageWithFallback';
 import Image from 'next/image';
 import Button from '../ui/Button';
 
@@ -51,14 +52,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
         <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
             <div className="relative">
                 <div className="relative h-52 w-full">
-                    <img 
-                        src={imageUrl || "https://via.placeholder.com/600x400/2a4365/e2e8f0/?text=Campaign"}
-                        alt={title}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "https://via.placeholder.com/600x400/2a4365/e2e8f0/?text=Campaign";
-                        }}
+                    <ImageWithFallback
+                      src={imageUrl || ''}
+                      alt={title}
+                      className="w-full h-full"
+                      fallbackType={
+                        (industry === 'Technology' || industry === 'Công nghệ') ? 'gradient' : 
+                        (industry === 'Food & Beverage' || industry === 'Thực phẩm') ? 'pattern' : 
+                        (industry === 'Finance' || industry === 'Tài chính' || industry === 'Ngân hàng') ? 'solid' :
+                        (industry === 'Retail' || industry === 'Bán lẻ') ? 'pattern' :
+                        'business'
+                      }
                     />
                 </div>
                 

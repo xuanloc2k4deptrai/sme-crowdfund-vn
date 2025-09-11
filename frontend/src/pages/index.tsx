@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Button from "../components/ui/Button";
 import Image from "next/image";
+import ImageWithFallback from "../components/ui/ImageWithFallback";
 import Hero from "../components/layout/Hero";
 import FeatureSection from "../components/layout/FeatureSection";
 import HowItWorks from "../components/layout/HowItWorks";
@@ -293,14 +294,17 @@ const Home: React.FC = () => {
               return (
                 <div key={project.id} className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-1">
                   <div className="h-56 relative overflow-hidden">
-                    <img 
-                      src={project.imageUrl} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = `https://via.placeholder.com/800x600/2563eb/FFFFFF/?text=${encodeURIComponent(project.title)}`;
-                      }}
+                    <ImageWithFallback
+                      src={project.imageUrl || ''}
+                      alt={project.title}
+                      className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                      fallbackType={
+                        (project.industry === 'Technology' || project.industry === 'Công nghệ') ? 'gradient' : 
+                        (project.industry === 'Food & Beverage' || project.industry === 'Thực phẩm') ? 'pattern' : 
+                        (project.industry === 'Finance' || project.industry === 'Tài chính' || project.industry === 'Ngân hàng') ? 'solid' :
+                        (project.industry === 'Retail' || project.industry === 'Bán lẻ') ? 'pattern' :
+                        'business'
+                      }
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div className="absolute top-4 right-4 bg-yellow-400 text-blue-900 text-sm font-bold px-3 py-1 rounded-full shadow-lg">
