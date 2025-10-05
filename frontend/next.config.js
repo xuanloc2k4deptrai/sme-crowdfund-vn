@@ -5,8 +5,8 @@ const nextConfig = {
   // Pages directory configuration
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   
-  // Root directory configuration
-  outputFileTracingRoot: "d:\\APP xuanloc\\Nền tảng gọi vốn SME\\sme-crowdfund-vn\\frontend",
+  // Remove hardcoded path for Vercel deployment
+  // outputFileTracingRoot: "d:\\APP xuanloc\\Nền tảng gọi vốn SME\\sme-crowdfund-vn\\frontend",
   
   // Image optimization
   images: {

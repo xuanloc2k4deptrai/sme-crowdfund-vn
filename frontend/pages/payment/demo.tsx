@@ -102,7 +102,7 @@ const PaymentDemoPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{providerInfo.name} - Cổng thanh toán demo</title>
+        <title>{`${providerInfo.name} - Cổng thanh toán demo`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
