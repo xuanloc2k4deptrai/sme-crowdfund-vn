@@ -194,7 +194,7 @@ const Home: React.FC = () => {
       <HowItWorks />
 
       {/* Test Auth Section - Development Only */}
-      {process.env.NODE_ENV === 'development' && (
+      {(process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_SHOW_TEST_FEATURES === 'true') && (
         <section className="py-16 bg-gradient-to-r from-purple-100 to-pink-100">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8">
