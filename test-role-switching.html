@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Role Switching</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { margin: 5px; padding: 10px 15px; cursor: pointer; }
+        .business { background-color: #3b82f6; color: white; }
+        .investor { background-color: #10b981; color: white; }
+        .status { padding: 10px; margin: 10px 0; background-color: #f3f4f6; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test SME Crowdfunding Role Switching</h1>
+    
+    <div class="section">
+        <h3>Current Status</h3>
+        <div id="status" class="status">Checking...</div>
+        <button onclick="checkStatus()">Refresh Status</button>
+    </div>
+    
+    <div class="section">
+        <h3>Quick Actions</h3>
+        <button class="business" onclick="switchToBusiness()">🏢 Switch to Business</button>
+        <button class="investor" onclick="switchToInvestor()">💰 Switch to Investor</button>
+        <button onclick="clearData()">🗑️ Clear Data</button>
+    </div>
+    
+    <div class="section">
+        <h3>Dashboard Links</h3>
+        <a href="http://localhost:3001/dashboard/business" target="_blank">
+            <button class="business">Open Business Dashboard</button>
+        </a>
+        <a href="http://localhost:3001/dashboard/investor" target="_blank">
+            <button class="investor">Open Investor Dashboard</button>
+        </a>
+    </div>
+
+    <script>
+        function checkStatus() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            const token = localStorage.getItem('token');
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            const statusDiv = document.getElementById('status');
+            if (user) {
+                statusDiv.innerHTML = `
+                    <strong>Current User:</strong> ${user.name} (${user.email})<br>
+                    <strong>Role:</strong> ${user.role}<br>
+                    <strong>User Type:</strong> ${user.userType}<br>
+                    <strong>Token:</strong> ${token ? 'Present' : 'Missing'}<br>
+                    <strong>Registered Users:</strong> ${registeredUsers.length} users
+                `;
+            } else {
+                statusDiv.innerHTML = '<strong>No user logged in</strong>';
+            }
+        }
+        
+        function switchToBusiness() {
+            // Initialize users first
+            initializeMockUsers();
+            
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const businessUser = existingUsers.find(u => u.role === 'business');
+            
+            if (businessUser) {
+                const fullBusinessUser = {
+                    ...businessUser,
+                    userType: 'business'
+                };
+                
+                localStorage.setItem('token', 'mock-business-token-' + Math.random().toString(36).substr(2, 9));
+                localStorage.setItem('user', JSON.stringify(fullBusinessUser));
+                console.log('Switched to existing business user:', fullBusinessUser);
+            } else {
+                console.error('No business user found, creating new one');
+                const mockBusinessUser = {
+                    id: 2001,
+                    email: 'business@company.com',
+                    name: 'Business User',
+                    role: 'business',
+                    userType: 'business'
+                };
+                
+                localStorage.setItem('token', 'mock-business-token-' + Math.random().toString(36).substr(2, 9));
+                localStorage.setItem('user', JSON.stringify(mockBusinessUser));
+            }
+            
+            // Dispatch custom event
+            window.dispatchEvent(new CustomEvent('userChanged'));
+            checkStatus();
+        }
+        
+        function switchToInvestor() {
+            // Initialize users first
+            initializeMockUsers();
+            
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            const investorUser = existingUsers.find(u => u.role === 'investor');
+            
+            if (investorUser) {
+                const fullInvestorUser = {
+                    ...investorUser,
+                    userType: 'investor'
+                };
+                
+                localStorage.setItem('token', 'mock-investor-token-' + Math.random().toString(36).substr(2, 9));
+                localStorage.setItem('user', JSON.stringify(fullInvestorUser));
+                console.log('Switched to existing investor user:', fullInvestorUser);
+            } else {
+                console.error('No investor user found, creating new one');
+                const mockInvestorUser = {
+                    id: 1001,
+                    email: 'investor@example.com',
+                    name: 'Investor User',
+                    role: 'investor',
+                    userType: 'investor'
+                };
+                
+                localStorage.setItem('token', 'mock-investor-token-' + Math.random().toString(36).substr(2, 9));
+                localStorage.setItem('user', JSON.stringify(mockInvestorUser));
+            }
+            
+            // Dispatch custom event
+            window.dispatchEvent(new CustomEvent('userChanged'));
+            checkStatus();
+        }
+
+        function initializeMockUsers() {
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            const businessUser = {
+                id: 2001,
+                email: 'business@company.com',
+                name: 'Business User',
+                role: 'business'
+            };
+            
+            const investorUser = {
+                id: 1001,
+                email: 'investor@example.com',
+                name: 'Investor User',
+                role: 'investor'
+            };
+            
+            // Add business user if not exists
+            if (!existingUsers.find(u => u.email === businessUser.email)) {
+                existingUsers.push(businessUser);
+            }
+            
+            // Add investor user if not exists
+            if (!existingUsers.find(u => u.email === investorUser.email)) {
+                existingUsers.push(investorUser);
+            }
+            
+            localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
+            console.log('Initialized mock users:', existingUsers);
+        }
+        
+        function clearData() {
+            localStorage.clear();
+            checkStatus();
+        }
+        
+        // Check status on load
+        initializeMockUsers();
+        checkStatus();
+        
+        // Listen for storage changes
+        window.addEventListener('storage', checkStatus);
+        window.addEventListener('userChanged', checkStatus);
+    </script>
+</body>
+</html>

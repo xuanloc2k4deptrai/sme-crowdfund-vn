@@ -82,19 +82,17 @@ const Hero: React.FC<HeroProps> = ({
           
           {/* Image/illustration */}
           <div className="relative flex justify-center animate-slideUp animation-delay-150">
-            <div className="relative w-full max-w-md">
+                <div className="relative w-full max-w-md">
               {/* Main image */}
               <div className="relative z-10 rounded-xl overflow-hidden shadow-2xl border border-white/20 transform hover:-rotate-1 transition-all duration-300">
                 <ImageWithFallback
-                  src=""
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop&crop=center&auto=format&q=80"
                   alt="SME Crowdfunding Platform - Business Meeting"
-                  className="w-full h-auto aspect-[3/2]"
-                  style={{ minHeight: '400px' }}
-                  fallbackType="business"
+                  className="w-full h-auto aspect-[3/2] object-cover"
+                  width={600}
+                  height={400}
                 />
-              </div>
-              
-              {/* Floating elements - redesigned to match the image */}
+              </div>              {/* Floating elements - redesigned to match the image */}
               {/* Money increase notification */}
               <div className="absolute -left-20 top-24 bg-white/10 backdrop-blur-md p-4 rounded-lg shadow-2xl transform -rotate-2 z-20 border border-white/20 hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center gap-3">

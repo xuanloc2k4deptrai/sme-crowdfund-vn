@@ -5,9 +5,24 @@ const nextConfig = {
   // Pages directory configuration
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
   
+  // Root directory configuration
+  outputFileTracingRoot: "d:\\APP xuanloc\\Nền tảng gọi vốn SME\\sme-crowdfund-vn\\frontend",
+  
   // Image optimization
   images: {
-    domains: ['localhost', '127.0.0.1'], // Local development domains
+    domains: ['localhost', '127.0.0.1', 'via.placeholder.com', 'placehold.co', 'images.unsplash.com', 'source.unsplash.com'], // Common image domains
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
+    ],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },

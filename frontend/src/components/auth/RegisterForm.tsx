@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Button from '../ui/Button';
@@ -9,6 +9,7 @@ export default function RegisterForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [userType, setUserType] = useState(''); // 'investor' hoặc 'business'
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState('');
   const { register, error } = useAuth();
@@ -18,8 +19,8 @@ export default function RegisterForm() {
     e.preventDefault();
     setValidationError('');
     
-    if (!name || !email || !password || !confirmPassword) {
-      setValidationError('Vui lòng điền đầy đủ thông tin');
+    if (!name || !email || !password || !confirmPassword || !userType) {
+      setValidationError('Vui lòng điền đầy đủ thông tin và chọn loại tài khoản');
       return;
     }
 
@@ -35,8 +36,8 @@ export default function RegisterForm() {
 
     try {
       setIsSubmitting(true);
-      await register(name, email, password);
-      router.push('/dashboard'); // Redirect to dashboard after registration
+      await register(name, email, password, userType); // Truyền thêm userType
+      router.push('/login?message=registration_success'); // Redirect to login after registration
     } catch (err) {
       // Error is handled by AuthContext
     } finally {
@@ -128,6 +129,62 @@ export default function RegisterForm() {
             </div>
 
             <div>
+              <label htmlFor="userType" className="block text-sm font-medium text-gray-700">
+                Bạn muốn đăng ký với tư cách
+              </label>
+              <div className="mt-2 space-y-3">
+                <div className="flex items-center">
+                  <input
+                    id="investor"
+                    name="userType"
+                    type="radio"
+                    value="investor"
+                    checked={userType === 'investor'}
+                    onChange={(e) => setUserType(e.target.value)}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <label htmlFor="investor" className="ml-3 block text-sm font-medium text-gray-700">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                      </div>
+                      <div className="ml-2">
+                        <div className="text-sm font-medium">Nhà đầu tư</div>
+                        <div className="text-xs text-gray-500">Đầu tư vào các dự án SME</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    id="business"
+                    name="userType"
+                    type="radio"
+                    value="business"
+                    checked={userType === 'business'}
+                    onChange={(e) => setUserType(e.target.value)}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <label htmlFor="business" className="ml-3 block text-sm font-medium text-gray-700">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      </div>
+                      <div className="ml-2">
+                        <div className="text-sm font-medium">Doanh nghiệp SME</div>
+                        <div className="text-xs text-gray-500">Gọi vốn cho dự án của bạn</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
               </label>
@@ -208,7 +265,7 @@ export default function RegisterForm() {
           <div>
             <Button
               type="submit"
-              disabled={isSubmitting || !name || !email || !password || !confirmPassword}
+              disabled={isSubmitting || !name || !email || !password || !confirmPassword || !userType}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (

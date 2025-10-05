@@ -14,7 +14,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
             return res.status(403).json({ message: 'Failed to authenticate token' });
         }
 
-        req.user = decoded as User; // Assuming you have a User type defined
+        (req as any).user = decoded as User; // Assuming you have a User type defined
         next();
     });
 };

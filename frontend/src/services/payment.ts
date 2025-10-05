@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -35,4 +37,14 @@ export const getPaymentStatus = async (paymentId: string) => {
     } catch (error: any) {
         throw new Error(error.response?.data?.message || 'Failed to retrieve payment status');
     }
-};
+}
+
+function useAuth() {
+  const auth = useContext(AuthContext);
+  if (!auth) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return auth;
+}
+
+export default useAuth;

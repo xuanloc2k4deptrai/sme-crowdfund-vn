@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "name": "sme-crowdfund-vn",
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "npm ci"
-}

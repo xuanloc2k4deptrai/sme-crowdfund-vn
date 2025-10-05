@@ -54,15 +54,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({
                 <div className="relative h-52 w-full">
                     <ImageWithFallback
                       src={imageUrl || ''}
-                      alt={title}
+                      alt={`${title} - ${industry}`}
                       className="w-full h-full"
-                      fallbackType={
-                        (industry === 'Technology' || industry === 'Công nghệ') ? 'gradient' : 
-                        (industry === 'Food & Beverage' || industry === 'Thực phẩm') ? 'pattern' : 
-                        (industry === 'Finance' || industry === 'Tài chính' || industry === 'Ngân hàng') ? 'solid' :
-                        (industry === 'Retail' || industry === 'Bán lẻ') ? 'pattern' :
-                        'business'
-                      }
                     />
                 </div>
                 

@@ -81,13 +81,17 @@ export const createCampaign = async (req: Request, res: Response) => {
         summary,
         description,
         target,
+        targetAmount: target, // Add targetAmount field
         imageUrl,
         industry,
         riskLevel,
         type,
         location,
         status: 'draft',
-        ownerId: userId,
+        raised: 0,
+        owner: {
+          connect: { id: userId }
+        },
       },
     });
     

@@ -386,7 +386,8 @@ export const mockCampaigns: Campaign[] = [
     raised: 250000000,
     status: 'active',
     ownerId: 1,
-    imageUrl: undefined, // Will use ImageWithFallback business SVG
+    imageUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop&crop=center&auto=format&q=80', // AI Tech workspace
+    coverImage: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1200&h=800&fit=crop&crop=center&auto=format&q=80', // Technology background
     createdAt: '2025-08-25T09:00:00Z',
     endDate: new Date('2025-09-18T09:00:00Z'),
     industry: 'Công nghệ',
@@ -708,7 +709,8 @@ export const mockCampaigns: Campaign[] = [
     raised: 150000000,
     status: 'active',
     ownerId: 2,
-    imageUrl: undefined, // Will use ImageWithFallback food SVG
+    imageUrl: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&h=600&fit=crop&crop=center&auto=format&q=80', // Green farm agriculture
+    coverImage: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=1200&h=800&fit=crop&crop=center&auto=format&q=80', // Farm landscape
     createdAt: '2025-09-01T10:30:00Z',
     endDate: new Date('2025-09-11T10:30:00Z'),
     industry: 'Thực phẩm',
@@ -1214,7 +1216,8 @@ export const mockCampaigns: Campaign[] = [
     raised: 50000000,
     status: 'active',
     ownerId: 1,
-    imageUrl: undefined, // Will use ImageWithFallback tech SVG
+    imageUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop&crop=center&auto=format&q=80', // Healthcare medical
+    coverImage: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&h=800&fit=crop&crop=center&auto=format&q=80', // Medical technology
     createdAt: '2025-08-12T14:15:00Z',
     endDate: new Date('2025-10-01T14:15:00Z'),
     industry: 'Tài chính',
@@ -1242,7 +1245,7 @@ export const mockCampaigns: Campaign[] = [
 
 // Get user's campaigns
 export const getUserCampaigns = (userId: string): Campaign[] => {
-  return mockCampaigns.filter(campaign => campaign.ownerId.toString() === userId);
+  return mockCampaigns.filter(campaign => campaign.ownerId?.toString() === userId);
 };
 
 // Get a campaign by ID

@@ -19,11 +19,9 @@ export const fetchCampaigns = async (filters: CampaignFilter = {}): Promise<Camp
       // Filter mock campaigns based on provided filters
       let filtered = [...mockCampaigns];
       
-      if (filters.ownerId) {
-        filtered = filtered.filter(c => c.ownerId.toString() === filters.ownerId);
-      }
-      
-      if (filters.industry) {
+    if (filters.ownerId) {
+        filtered = filtered.filter(c => c.ownerId?.toString() === filters.ownerId);
+    }      if (filters.industry) {
         filtered = filtered.filter(c => c.industry === filters.industry);
       }
       

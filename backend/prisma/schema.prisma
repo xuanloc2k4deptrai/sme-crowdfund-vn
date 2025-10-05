@@ -8,33 +8,350 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String    
-  name      String?
-  role      String    @default("investor")
-  createdAt DateTime  @default(now())
-  campaigns Campaign[]
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String    
+  name        String?
+  role        String        @default("investor")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  // Business profile fields
+  companyName String?
+  businessLicense String?
+  taxId       String?
+  phoneNumber String?
+  address     String?
+  isVerified  Boolean       @default(false)
+  verificationStatus String @default("pending") // pending, approved, rejected
+  campaigns   Campaign[]
+  investments Investment[]
+  documents   Document[]
+  
+  // Security and payment relations
+  transactions Transaction[] @relation("InvestorTransactions")
+  devices     UserDevice[]
 }
 
 model Campaign {
+  id            Int           @id @default(autoincrement())
+  title         String
+  summary       String?
+  description   String?       @default("")
+  target        Int
+  raised        Int           @default(0)
+  currentAmount Int           @default(0)
+  targetAmount  Int
+  status        String        @default("draft") // draft, pending_review, approved, active, completed, cancelled
+  category      String        @default("Khác")
+  ownerId       Int
+  owner         User          @relation(fields: [ownerId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  imageUrl      String?
+  startDate     DateTime?
+  endDate       DateTime?
+  riskLevel     String?       @default("medium")
+  industry      String?
+  type          String?       @default("equity")
+  location      String?       @default("Việt Nam")
+  rating        Float?        @default(3.0)
+  investors     Int?          @default(0)
+  
+  // Enhanced campaign fields
+  businessModel String?
+  revenueModel  String?
+  marketSize    String?
+  competitiveAdvantage String?
+  useOfFunds    String?
+  financialProjection String?
+  teamDescription String?
+  vision        String?
+  mission       String?
+  
+  // Investment terms
+  investmentType String?      @default("equity") // equity, debt, reward
+  minimumInvestment Int?      @default(1000000) // VND
+  maximumInvestment Int?
+  expectedROI   Float?
+  investmentTerm Int?         // months
+  
+  // Compliance and verification
+  isVerified    Boolean       @default(false)
+  verificationDate DateTime?
+  complianceStatus String     @default("pending") // pending, approved, rejected
+  
+  // SEO and marketing
+  slug          String?       @unique
+  tags          String?       // JSON array of tags
+  videoUrl      String?
+  pitchDeckUrl  String?
+  
+  investments   Investment[]
+  documents     Document[]
+  milestones    Milestone[]
+  updates       CampaignUpdate[]
+  transactions  Transaction[]
+}
+
+model Document {
   id          Int      @id @default(autoincrement())
+  filename    String
+  originalName String
+  fileType    String
+  fileSize    Int
+  s3Key       String?  // For AWS S3 storage
+  documentType String  // business_license, financial_statement, pitch_deck, etc.
+  isVerified  Boolean  @default(false)
+  uploadedAt  DateTime @default(now())
+  
+  // Relations
+  userId      Int?
+  campaignId  Int?
+  user        User?     @relation(fields: [userId], references: [id])
+  campaign    Campaign? @relation(fields: [campaignId], references: [id])
+}
+
+model Milestone {
+  id          Int      @id @default(autoincrement())
+  campaignId  Int
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
   title       String
-  summary     String?
-  description String?  @default("")
-  target      Int
-  raised      Int      @default(0)
-  status      String   @default("draft")
-  ownerId     Int
-  owner       User     @relation(fields: [ownerId], references: [id])
+  description String?
+  targetAmount Int
+  deadline    DateTime
+  status      String   @default("pending") // pending, in_progress, completed, overdue
   createdAt   DateTime @default(now())
+  completedAt DateTime?
+}
+
+model CampaignUpdate {
+  id          Int      @id @default(autoincrement())
+  campaignId  Int
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
+  title       String
+  content     String
   imageUrl    String?
-  startDate   DateTime?
-  endDate     DateTime?
-  riskLevel   String?   @default("medium")
-  industry    String?
-  type        String?   @default("equity")
-  location    String?   @default("Việt Nam")
-  rating      Float?    @default(3.0)
-  investors   Int?      @default(0)
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model Investment {
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  userId     Int
+  campaignId Int
+  user       User     @relation(fields: [userId], references: [id])
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  createdAt  DateTime @default(now())
+  status     String   @default("active")
+}
+
+// Secure Payment System Models
+model Transaction {
+  id            String   @id
+  campaignId    Int
+  investorId    Int
+  amount        Int
+  currency      String   @default("VND")
+  providerId    String
+  status        String   @default("pending") // pending, processing, completed, failed, cancelled, refunded
+  paymentUrl    String?
+  qrCode        String?
+  expiresAt     DateTime
+  
+  // Fees
+  platformFee   Int      @default(0)
+  gatewayFee    Int      @default(0)
+  totalFee      Int      @default(0)
+  
+  // Security Information
+  riskScore     Int      @default(0)
+  deviceFingerprint String?
+  ipAddress     String?
+  userAgent     String?
+  verificationRequired Boolean @default(false)
+  verificationMethods String? // comma-separated list
+  verificationStatus String @default("none") // none, pending, verified, failed
+  
+  // Metadata
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  attemptCount  Int      @default(0)
+  lastAttemptAt DateTime?
+  
+  // Provider-specific data
+  providerTransactionId String?
+  providerResponse String? // JSON string
+  
+  // Relations
+  campaign      Campaign @relation(fields: [campaignId], references: [id])
+  investor      User     @relation("InvestorTransactions", fields: [investorId], references: [id])
+  refunds       Refund[]
+  attempts      PaymentAttempt[]
+  
+  @@map("transactions")
+}
+
+model Refund {
+  id            String   @id @default(cuid())
+  transactionId String
+  amount        Int
+  reason        String
+  status        String   @default("pending") // pending, processing, completed, failed
+  providerRefundId String?
+  providerResponse String? // JSON string
+  
+  // Metadata
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  processedAt   DateTime?
+  
+  // Relations
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  
+  @@map("refunds")
+}
+
+model UserDevice {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  fingerprint String
+  deviceInfo  String?  // Browser, OS, etc. (JSON string)
+  ipAddress   String?
+  userAgent   String?
+  isTrusted   Boolean  @default(false)
+  isBlocked   Boolean  @default(false)
+  firstSeen   DateTime @default(now())
+  lastSeen    DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id])
+  
+  @@unique([userId, fingerprint])
+  @@map("user_devices")
+}
+
+model Blacklist {
+  id          Int      @id @default(autoincrement())
+  type        String   // ip, device, user, email
+  value       String   // The blacklisted value
+  reason      String
+  severity    String   @default("medium") // low, medium, high, critical
+  isActive    Boolean  @default(true)
+  
+  // Optional relations
+  userId      Int?
+  ipAddress   String?
+  deviceFingerprint String?
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   Int?     // Admin user who added this
+  expiresAt   DateTime?
+  
+  @@map("blacklist")
+}
+
+model SecurityEvent {
+  id          Int      @id @default(autoincrement())
+  type        String   // failed_payment, suspicious_activity, fraud_attempt, etc.
+  severity    String   // low, medium, high, critical
+  description String
+  metadata    String?  // Additional event data (JSON string)
+  
+  // Associated entities
+  userId      Int?
+  transactionId String?
+  ipAddress   String?
+  deviceFingerprint String?
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  Int?
+  
+  @@map("security_events")
+}
+
+model PaymentProvider {
+  id          String   @id
+  name        String
+  type        String   // digital_wallet, bank_transfer, crypto, card, qr_code
+  isActive    Boolean  @default(true)
+  
+  // Configuration
+  config      String   // API keys, endpoints, etc. (encrypted JSON string)
+  
+  // Limits and fees
+  minAmount   Int      @default(0)
+  maxAmount   Int      @default(999999999)
+  dailyLimit  Int      @default(999999999)
+  fixedFee    Int      @default(0)
+  percentageFee Float  @default(0)
+  
+  // Processing info
+  processingTime String @default("Tức thì")
+  supportedCurrencies String @default("VND") // comma-separated
+  securityLevel String @default("medium") // standard, medium, high
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("payment_providers")
+}
+
+model PaymentAttempt {
+  id          Int      @id @default(autoincrement())
+  transactionId String
+  providerId  String
+  status      String   // initiated, redirected, callback_received, completed, failed
+  errorCode   String?
+  errorMessage String?
+  providerResponse String? // JSON string
+  
+  // Timing
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  
+  // Relations
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  
+  @@map("payment_attempts")
+}
+
+model FraudRule {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  ruleType    String   // amount_limit, velocity, geolocation, device, etc.
+  conditions  String   // Rule conditions in JSON format
+  action      String   // block, flag, require_verification
+  isActive    Boolean  @default(true)
+  priority    Int      @default(1)
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("fraud_rules")
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  action      String   // payment_initiated, payment_completed, refund_processed, etc.
+  entityType  String   // transaction, user, campaign, etc.
+  entityId    String
+  userId      Int?     // Who performed the action
+  oldValues   String?  // JSON string
+  newValues   String?  // JSON string
+  ipAddress   String?
+  userAgent   String?
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  
+  @@map("audit_logs")
 }

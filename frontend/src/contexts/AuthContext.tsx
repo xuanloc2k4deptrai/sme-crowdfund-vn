@@ -6,6 +6,7 @@ interface User {
   email: string;
   name: string;
   role: string;
+  userType?: string; // 'investor' hoặc 'business'
 }
 
 interface AuthContextType {
@@ -13,7 +14,7 @@ interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string, role?: string) => Promise<void>;
+  register: (name: string, email: string, password: string, userType?: string) => Promise<void>;
   logout: () => void;
   error: string | null;
 }
@@ -32,6 +33,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(savedUser);
     }
     setIsLoading(false);
+
+    // Listen for localStorage changes (including from other tabs or direct localStorage updates)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'user') {
+        const newUser = getCurrentUser();
+        console.log('AuthContext: localStorage changed, updating user:', newUser);
+        setUser(newUser);
+      }
+    };
+
+    // Listen for custom event when user is updated via authService functions
+    const handleUserChange = () => {
+      const newUser = getCurrentUser();
+      console.log('AuthContext: user change event, updating user:', newUser);
+      setUser(newUser);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('userChanged', handleUserChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userChanged', handleUserChange);
+    };
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -48,12 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (name: string, email: string, password: string, role?: string) => {
+  const register = async (name: string, email: string, password: string, userType?: string) => {
     try {
       setIsLoading(true);
       setError(null);
-      console.log('Registering user with:', { name, email, role }); // Debug log
-      const response = await registerUser({ name, email, password, role });
+      console.log('Registering user with:', { name, email, userType }); // Debug log
+      const response = await registerUser({ name, email, password, role: userType });
       console.log('Registration response:', response); // Debug log
       setUser(response.user);
       console.log('User set in context:', response.user); // Debug log
@@ -87,3 +112,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 // Note: useAuth hook is now imported from '../hooks/useAuth'
+
+// But also export useAuth directly from here for compatibility
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

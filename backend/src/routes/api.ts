@@ -8,6 +8,7 @@ import {
   deleteCampaign 
 } from '../controllers/campaignController';
 import { authMiddleware, adminMiddleware } from '../middleware/authMiddleware';
+import aiRoutes from './ai';
 
 const router = Router();
 
@@ -32,6 +33,9 @@ router.get('/campaigns/:id', getCampaignById);
 router.post('/campaigns', authMiddleware, createCampaign);
 router.put('/campaigns/:id', authMiddleware, updateCampaign);
 router.delete('/campaigns/:id', authMiddleware, deleteCampaign);
+
+// AI routes
+router.use('/ai', aiRoutes);
 
 // User routes (Admin only)
 router.get('/admin/users', authMiddleware, adminMiddleware, (req, res) => {
