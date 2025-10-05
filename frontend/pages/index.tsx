@@ -193,15 +193,14 @@ const Home: React.FC = () => {
       {/* How It Works */}
       <HowItWorks />
 
-      {/* Test Auth Section - Development Only */}
-      {(process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_SHOW_TEST_FEATURES === 'true') && (
-        <section className="py-16 bg-gradient-to-r from-purple-100 to-pink-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center px-4 py-2 bg-purple-200 text-purple-800 rounded-full text-sm font-medium mb-4">
-                🧪 Development Mode Only
-              </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Quick Access Dashboard Testing</h2>
+      {/* Test Auth Section - Always Show */}
+      <section className="py-16 bg-gradient-to-r from-purple-100 to-pink-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center px-4 py-2 bg-purple-200 text-purple-800 rounded-full text-sm font-medium mb-4">
+              🧪 Demo Features
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Quick Access Dashboard Testing</h2>
               <p className="text-lg text-gray-600">
                 Dành cho developers: Truy cập nhanh vào các dashboard để test AI features
               </p>
@@ -295,7 +294,6 @@ const Home: React.FC = () => {
             </div>
           </div>
         </section>
-      )}
       
       {/* Statistics Section - Modern and Engaging */}
       <section className="py-20 bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950">
